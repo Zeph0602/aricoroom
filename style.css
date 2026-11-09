@@ -1,0 +1,1830 @@
+@charset "utf-8";
+
+/* =========================================
+   ベース設定（変数で色を管理すると便利です）
+========================================= */
+:root {
+  --bg-color: #F8EBEB; /* 背景の淡いピンク */
+  --main-color: #936363; /* ロゴやボタンのブラウン */
+  --text-color: #333333;
+  --sub-text-color: #998A8A; /* サブタイトルのグレーブラウン */
+}
+
+body {
+  margin: 0;
+  font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* =========================================
+   ヘッダー全体のレイアウト
+========================================= */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px; /* 左右の余白はFigmaに合わせて調整してください */
+  background-color: var(--bg-color);
+}
+
+/* --- ロゴエリア --- */
+.header__logo-area {
+  display: flex;
+  flex-direction: column;
+}
+
+.header__logo {
+  margin: 0;
+  font-size: 32px;
+  font-family: serif; /* Figmaで指定されている明朝体やセリフ体を指定してください */
+  color: var(--main-color);
+  letter-spacing: 0.1em;
+}
+
+.header__sub {
+  margin: 4px 0 0 0;
+  font-size: 10px;
+  color: var(--sub-text-color);
+  letter-spacing: 0.2em;
+}
+
+/* --- ナビゲーションエリア --- */
+.header__nav-area {
+  display: flex;
+  align-items: center;
+  gap: 30px; /* メニュー、ボタン、ハンバーガー間の余白 */
+}
+
+/* .header__nav {
+  /* スマホ表示の際はここを非表示にするなどの処理が入ります */
+
+
+.header__menu {
+  display: flex;
+  gap: 24px; /* 「レッスン一覧」と「お問い合わせ」の間の余白 */
+  font-size: 14px;
+  color: var(--text-color);
+}
+
+.header__menu a {
+  transition: opacity 0.3s ease;
+}
+
+.header__menu a:hover {
+  opacity: 0.7; /* ホバー時に少し薄くする */
+}
+
+/* --- 予約ボタン --- */
+.btn-reserve {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--main-color);
+  color: #fff;
+  font-size: 14px;
+  padding: 12px 24px;
+  border-radius: 4px; /* 角の丸みがあれば調整 */
+  transition: background-color 0.3s ease;
+}
+
+.btn-reserve:hover {
+  background-color: #7A4E4E; /* ホバーで少し暗くする */
+}
+
+.btn-reserve .arrow {
+  margin-left: 8px;
+}
+
+/* --- ハンバーガーメニューアイコン --- */
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.hamburger span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: var(--main-color);
+  transition: all 0.3s ease;
+}
+
+/* =========================================
+   ナビゲーションオーバーレイ（全画面メニュー）
+========================================= */
+.nav-overlay {
+  position: fixed;
+  top: 80px; /* ヘッダーの高さに合わせて調整してください */
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 80px);
+  background-color: #FAFAFA; /* 画像から推測した背景色 */
+  z-index: 100;
+  
+  /* 初期状態は非表示（ふわっと表示させる準備） */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+/* クラスが付与されたら表示 */
+.nav-overlay.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* --- メニュー内の3カラムレイアウト --- */
+.nav-overlay__inner {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1200px; /* 全体の最大幅（Figmaに合わせて調整） */
+  margin: 0 auto;
+  padding: 60px 40px;
+  gap: 60px;
+}
+
+/* 各カラムの幅設定 */
+.nav-overlay__intro { flex: 1; }
+.nav-overlay__main-menu { flex: 1; }
+.nav-overlay__sub-menu { flex: 0.8; }
+
+/* --- テキスト装飾 --- */
+.nav-overlay__subtitle {
+  font-size: 12px;
+  color: var(--main-color);
+  letter-spacing: 0.1em;
+  margin-bottom: 24px;
+}
+
+.nav-overlay__catch {
+  font-size: 28px;
+  font-family: serif;
+  color: var(--text-color);
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.nav-overlay__desc {
+  font-size: 14px;
+  color: var(--sub-text-color);
+  line-height: 1.8;
+  margin-bottom: 40px;
+}
+
+/* --- メインメニューのリスト装飾 --- */
+.nav-overlay__main-menu li {
+  border-bottom: 1px solid #E5D5D5; /* リストの区切り線 */
+}
+
+.nav-overlay__main-menu a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  font-size: 18px;
+  font-family: serif;
+  color: var(--text-color);
+  transition: opacity 0.3s;
+}
+
+.nav-overlay__main-menu a:hover {
+  opacity: 0.6;
+}
+
+/* --- 外部リンクのリスト装飾 --- */
+.nav-overlay__sub-menu li {
+  margin-bottom: 24px;
+}
+
+.nav-overlay__sub-menu a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  color: var(--main-color); /* 少し赤みがかった色 */
+  transition: opacity 0.3s;
+}
+
+.nav-overlay__sub-menu a:hover {
+  opacity: 0.6;
+}
+
+/* =========================================
+   ハンバーガーボタンのアニメーション（×印に変化）
+========================================= */
+.hamburger.is-active span:nth-child(1) {
+  transform: translateY(9px) rotate(45deg);
+}
+
+.hamburger.is-active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.is-active span:nth-child(3) {
+  transform: translateY(-9px) rotate(-45deg);
+}
+
+/* =========================================
+   コンセプトセクション
+========================================= */
+.concept {
+  padding: 100px 40px; /* 上下の余白はFigmaの数値に合わせて調整してください */
+  background-color: #FCFAFA; /* 背景色（Figmaのベースカラーに合わせて微調整してください） */
+}
+
+.concept__inner {
+  display: flex;
+  align-items: center; /* 縦の中央揃え */
+  justify-content: space-between;
+  max-width: 1100px; /* コンテンツの最大幅 */
+  margin: 0 auto;
+  gap: 60px; /* テキストと画像の間の余白 */
+}
+
+/* --- 左側：テキストエリア --- */
+.concept__text-area {
+  flex: 1; /* 横幅の比率 */
+}
+
+.section-subtitle {
+  font-size: 12px;
+  color: var(--main-color);
+  letter-spacing: 0.15em;
+  margin-bottom: 24px;
+}
+
+.concept__title {
+  font-size: 36px; /* Figmaのフォントサイズに合わせてください */
+  font-family: serif;
+  color: var(--text-color);
+  line-height: 1.6;
+  margin-bottom: 32px;
+  font-weight: normal;
+}
+
+.concept__desc {
+  font-size: 15px;
+  color: var(--text-color);
+  line-height: 1.8;
+  margin-bottom: 40px;
+}
+
+/* プライマリーボタン */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--main-color);
+  color: #fff;
+  font-size: 14px;
+  padding: 16px 32px;
+  border-radius: 4px; /* Figmaの角丸の数値に合わせてください */
+  transition: background-color 0.3s ease;
+  margin-bottom: 40px;
+}
+
+.btn-primary:hover {
+  background-color: #7A4E4E; /* ホバー時の色 */
+}
+
+.btn-primary .arrow {
+  margin-left: 12px;
+}
+
+.concept__location {
+  font-size: 11px;
+  color: var(--sub-text-color);
+  letter-spacing: 0.15em;
+}
+
+/* --- 右側：画像エリア --- */
+.concept__image-area {
+  flex: 1.2; /* テキストエリアよりも画像を少し大きめにする比率設定 */
+  position: relative; /* 子要素（キャプション）の絶対配置の基準にするため */
+}
+
+.concept__img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px; /* 画像の角丸（Figmaの数値に合わせてください） */
+  display: block;
+}
+
+/* 「イメージ写真」のラベル装飾 */
+.concept__img-caption {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  background-color: rgba(255, 255, 255, 0.85); /* 半透明の白背景 */
+  color: var(--text-color);
+  font-size: 10px;
+  padding: 6px 10px;
+  border-radius: 2px;
+}
+
+/* =========================================
+   WELCOME セクション
+========================================= */
+.welcome {
+  padding: 100px 40px; /* Figmaの余白に合わせて調整してください */
+  background-color: #F8F1F1; /* 画像から推測した淡いピンクベージュ背景 */
+}
+
+.welcome__inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* 上揃え */
+  max-width: 1100px;
+  margin: 0 auto;
+  gap: 80px; /* 左右カラム間の余白 */
+}
+
+/* --- 左側エリア --- */
+.welcome__left {
+  flex: 1;
+}
+
+.welcome__title {
+  font-size: 32px; /* Figmaの数値に合わせて調整 */
+  font-family: serif;
+  color: var(--text-color);
+  line-height: 1.6;
+  font-weight: normal;
+  margin-top: 24px;
+}
+
+/* --- 右側エリア --- */
+.welcome__right {
+  flex: 1;
+}
+
+.welcome__desc {
+  font-size: 15px;
+  color: var(--text-color);
+  line-height: 1.9;
+  margin-bottom: 24px;
+}
+
+/* アウトラインボタン（枠線タイプ） */
+.btn-outline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 420px; /* ボタンの最大幅 */
+  padding: 16px 24px;
+  border: 1px solid var(--main-color);
+  background-color: transparent;
+  color: var(--main-color);
+  font-size: 14px;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+  margin-top: 32px;
+}
+
+.btn-outline:hover {
+  background-color: var(--main-color);
+  color: #ffffff;
+}
+
+.btn-outline .arrow {
+  transition: transform 0.3s ease;
+}
+
+.btn-outline:hover .arrow {
+  transform: translateX(4px); /* ホバー時に矢印が右に少し動く演出 */
+}
+
+/* =========================================
+   THREE WAYS TO ENJOY セクション
+========================================= */
+.ways {
+  padding: 100px 40px;
+  background-color: #FAF6F6; /* 画像から推測した淡い背景色 */
+}
+
+.ways__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.ways__header {
+  margin-bottom: 48px;
+}
+
+.ways__title {
+  font-size: 32px;
+  font-family: serif;
+  color: var(--text-color);
+  font-weight: normal;
+  margin-top: 16px;
+}
+
+/* --- 3列レイアウト (Grid) --- */
+.ways__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-bottom: 32px;
+}
+
+/* --- カードスタイル --- */
+.ways-card {
+  background-color: #ffffff;
+  border: 1px solid #F0E3E3; /* カード外枠の淡いボーダー */
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.ways-card__image-area {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+}
+
+.ways-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 縦横比を維持してぴったり配置 */
+}
+
+.ways-card__img-caption {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background-color: rgba(255, 255, 255, 0.85);
+  color: var(--text-color);
+  font-size: 10px;
+  padding: 4px 8px;
+  border-radius: 2px;
+}
+
+.ways-card__content {
+  padding: 32px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* 内容量が違ってもボタンの位置を下に揃える */
+}
+
+/* 英語タイトルと日本語訳の横並び */
+.ways-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 24px;
+}
+
+.ways-card__title {
+  font-size: 28px;
+  font-family: serif;
+  color: var(--main-color);
+  font-weight: normal;
+  margin: 0;
+}
+
+.ways-card__ja {
+  font-size: 14px;
+  color: var(--sub-text-color);
+}
+
+.ways-card__desc {
+  font-size: 14px;
+  color: var(--text-color);
+  line-height: 1.8;
+  margin-bottom: 32px;
+  flex-grow: 1; /* 説明文の高さが違ってもボタンの位置が揃うように伸縮 */
+}
+
+/* カード内のボタン */
+.btn-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--main-color);
+  border-radius: 4px;
+  background-color: transparent;
+  color: var(--main-color);
+  font-size: 13px;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.btn-card:hover {
+  background-color: var(--main-color);
+  color: #ffffff;
+}
+
+.ways__note {
+  font-size: 12px;
+  color: var(--sub-text-color);
+  margin-top: 16px;
+}
+
+/* =========================================
+   NEWS（最新のお知らせ）セクション
+========================================= */
+.news {
+  padding: 100px 40px;
+  background-color: #F8F1F1; /* これまでのセクションと同系の淡いピンクベージュ */
+}
+
+.news__inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  max-width: 1100px;
+  margin: 0 auto;
+  gap: 80px;
+}
+
+/* --- 左側エリア --- */
+.news__left {
+  flex: 1;
+}
+
+.news__title {
+  font-size: 32px;
+  font-family: serif;
+  color: var(--text-color);
+  font-weight: normal;
+  margin-top: 16px;
+}
+
+/* --- 右側エリア --- */
+.news__right {
+  flex: 1.3; /* 右側のエリア幅を少し広めに確保 */
+}
+
+.news__desc {
+  font-size: 15px;
+  color: var(--text-color);
+  line-height: 1.8;
+  margin-bottom: 24px;
+}
+
+/* Instagramボタン（中が白色のアウトラインボタン） */
+.btn-instagram {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 18px 24px;
+  border: 1px solid var(--main-color);
+  border-radius: 4px;
+  background-color: #ffffff; /* ボタンの内側は白色 */
+  color: var(--main-color);
+  font-size: 15px;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+  margin-bottom: 24px;
+}
+
+.btn-instagram:hover {
+  background-color: var(--main-color);
+  color: #ffffff;
+}
+
+.btn-instagram .arrow {
+  transition: transform 0.3s ease;
+}
+
+.btn-instagram:hover .arrow {
+  transform: translateX(4px); /* ホバー時に矢印が右に動く */
+}
+
+.news__subtext {
+  font-size: 13px;
+  color: var(--sub-text-color);
+  line-height: 1.6;
+}
+
+/* =========================================
+   ACCESS（アクセス）セクション
+========================================= */
+.access {
+  padding: 100px 40px;
+  background-color: #F8F1F1; /* 全体で統一された淡い背景色 */
+}
+
+.access__inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  max-width: 1100px;
+  margin: 0 auto;
+  gap: 80px;
+}
+
+/* --- 左側エリア --- */
+.access__left {
+  flex: 1;
+}
+
+.access__title {
+  font-size: 32px;
+  font-family: serif;
+  color: var(--text-color);
+  font-weight: normal;
+  margin: 16px 0 24px;
+}
+
+.access__desc {
+  font-size: 14px;
+  color: var(--sub-text-color);
+  margin-bottom: 32px;
+}
+
+/* 白背景の枠線ボタン */
+.btn-outline-white {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 420px;
+  padding: 16px 24px;
+  border: 1px solid var(--main-color);
+  border-radius: 4px;
+  background-color: #ffffff;
+  color: var(--main-color);
+  font-size: 14px;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-white:hover {
+  background-color: var(--main-color);
+  color: #ffffff;
+}
+
+.btn-outline-white .arrow {
+  transition: transform 0.3s ease;
+}
+
+.btn-outline-white:hover .arrow {
+  transform: translateX(4px);
+}
+
+/* --- 右側エリア（情報カード） --- */
+.access__right {
+  flex: 1.2;
+}
+
+.access__card {
+  background-color: #ffffff;
+  border: 1px solid #EBE2E2; /* 枠線の淡い色 */
+  border-radius: 8px; /* 角丸設定 */
+  overflow: hidden;
+}
+
+.access__row {
+  display: flex;
+  margin: 0;
+  padding: 32px 40px;
+}
+
+/* 上の行と下の行を仕切る薄い境界線 */
+.access__row:not(:last-child) {
+  border-bottom: 1px solid #EBE2E2;
+}
+
+.access__label {
+  width: 120px;
+  font-size: 14px;
+  color: var(--sub-text-color);
+  font-weight: normal;
+}
+
+.access__value {
+  flex: 1;
+  margin: 0;
+  font-size: 15px;
+  color: var(--text-color);
+  line-height: 1.8;
+}
+
+/* =========================================
+   RESERVATION & CONTACT (CTA) セクション
+========================================= */
+.cta {
+  padding: 100px 40px;
+  background-color: #F8F1F1; /* これまでのセクションと統一された背景色 */
+}
+
+.cta__inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* 左右の要素を上下中央揃え */
+  max-width: 1100px;
+  margin: 0 auto;
+  gap: 60px;
+}
+
+/* --- 左側エリア --- */
+.cta__left {
+  flex: 1.2;
+}
+
+.cta__title {
+  font-size: 32px;
+  font-family: serif;
+  color: var(--text-color);
+  font-weight: normal;
+  margin: 16px 0 24px;
+}
+
+.cta__desc {
+  font-size: 14px;
+  color: var(--text-color);
+  line-height: 1.8;
+}
+
+/* --- 右側エリア --- */
+.cta__right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 360px; /* 右側ボタン群の横幅制限 */
+  width: 100%;
+}
+
+/* 共通ボタン調整（幅いっぱいに広げる） */
+.cta__btn {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+}
+
+/* 予約ボタン個別のテキストレイアウト調整 */
+.cta .btn-primary {
+  justify-content: space-between;
+  padding: 16px 24px;
+}
+
+/* テキストリンク装飾 */
+.cta__link {
+  font-size: 13px;
+  color: var(--main-color);
+  text-decoration: underline;
+  margin-top: 8px;
+  transition: opacity 0.3s ease;
+}
+
+.cta__link:hover {
+  opacity: 0.7;
+}
+
+.cta__link .arrow {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.cta__link:hover .arrow {
+  transform: translateX(4px);
+}
+
+/* =========================================
+   フッター
+========================================= */
+.footer {
+  background-color: #ffffff; /* 白背景 */
+  padding: 32px 40px; /* Figmaの余白に合わせて調整してください */
+}
+
+.footer__inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer__logo {
+  font-size: 20px;
+  font-family: serif;
+  color: var(--main-color);
+  letter-spacing: 0.1em;
+  margin: 0;
+}
+
+.footer__copyright {
+  font-size: 11px;
+  color: var(--sub-text-color);
+  margin: 0;
+}
+
+/* =========================================
+   about.php（ARICOROOMについて）専用スタイル
+========================================= */
+
+
+
+/* --- ページヘッダーエリア --- */
+.page-header {
+  padding: 60px 40px 40px;
+  background-color: #ffffff;
+}
+
+.page-header__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* --- パンくずリスト --- */
+.breadcrumb {
+  margin-bottom: 32px;
+}
+
+.breadcrumb ul {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--sub-text-color);
+}
+
+.breadcrumb li a {
+  color: var(--sub-text-color);
+  transition: opacity 0.3s ease;
+}
+
+.breadcrumb li a:hover {
+  opacity: 0.7;
+}
+
+.breadcrumb li:not(:last-child)::after {
+  content: "/";
+  margin-left: 8px;
+  color: var(--sub-text-color);
+}
+
+.page-header__title {
+  font-size: 36px;
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 400;
+  color: var(--text-color);
+  margin-top: 16px;
+}
+
+/* --- A WORLD OF CANDLES セクション --- */
+.about-story {
+  padding: 100px 40px;
+  background-color: #FFFFFF;
+}
+
+.about-story__inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto;
+  gap: 60px;
+}
+
+/* 左側テキスト */
+.about-story__text-area {
+  flex: 1;
+}
+
+.about-story__title {
+  font-size: 36px;
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 400;
+  color: var(--text-color);
+  line-height: 1.6;
+  margin: 16px 0 32px;
+}
+
+.about-story__desc {
+  font-size: 15px;
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 400;
+  color: var(--text-color);
+  line-height: 2.2;
+  margin: 0;
+}
+
+/* 右側画像 */
+.about-story__image-area {
+  flex: 1.2;
+  position: relative;
+}
+
+.about-story__img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+}
+
+.about-story__img-caption {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  background-color: rgba(255, 255, 255, 0.85);
+  color: var(--text-color);
+  font-size: 10px;
+  padding: 6px 10px;
+  border-radius: 2px;
+}
+
+/* --- MESSAGE（ご挨拶）セクション --- */
+.about-message {
+  width: 100%;
+  padding: 100px 40px;
+  background-color: #F8F4F1; /* ややウォーム系の淡い背景色 */
+  box-sizing: border-box;
+}
+
+.about-message__inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto;
+  gap: 60px;
+}
+
+/* 左側画像 */
+.about-message__image-area {
+  flex: 1.2;
+  position: relative;
+}
+
+.about-message__img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+}
+
+.about-message__img-caption {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  background-color: rgba(255, 255, 255, 0.85);
+  color: var(--text-color);
+  font-size: 10px;
+  padding: 6px 10px;
+  border-radius: 2px;
+}
+
+/* 右側テキスト */
+.about-message__text-area {
+  flex: 1;
+}
+
+.about-message__title {
+  font-size: 32px;
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 400;
+  color: var(--text-color);
+  margin: 16px 0 24px;
+}
+
+.about-message__desc {
+  font-size: 15px;
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 400;
+  color: var(--text-color);
+  line-height: 2;
+  margin: 0 0 32px;
+}
+
+/* ボタン（枠線タイプ） */
+.btn-more {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 14px 24px;
+  border: 1px solid #8C6262; /* デザインに合わせた薄いブラウン枠 */
+  background-color: #ffffff;
+  color: #8C6262;
+  text-decoration: none;
+  font-size: 14px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.btn-more:hover {
+  background-color: #8C6262;
+  color: #ffffff;
+}
+
+/* --- CANDLE GALLERY セクション --- */
+.about-gallery {
+  width: 100%;
+  padding: 100px 40px;
+  background-color: #FCFAFA;
+  box-sizing: border-box;
+}
+
+.about-gallery__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* 見出し */
+.about-gallery__header {
+  margin-bottom: 48px;
+}
+
+.about-gallery__title {
+  font-size: 32px;
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 400;
+  color: var(--text-color);
+  margin-top: 16px;
+}
+
+/* ギャラリー画像（横並び） */
+.about-gallery__list {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 32px;
+}
+
+.about-gallery__item {
+  flex: 1;
+  position: relative;
+}
+
+.about-gallery__img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+}
+
+.about-gallery__img-caption {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  background-color: rgba(255, 255, 255, 0.85);
+  color: var(--text-color);
+  font-size: 10px;
+  padding: 6px 10px;
+  border-radius: 2px;
+}
+
+/* 注記 */
+.about-gallery__note {
+  font-size: 12px;
+  color: var(--sub-text-color);
+  margin: 0;
+}
+
+/* --- BLOG & HISTORY セクション --- */
+.about-history {
+  width: 100%;
+  padding: 100px 40px;
+  background-color: #F8F1F1; /* MESSAGEセクションと同じ淡い背景色 */
+  box-sizing: border-box;
+}
+
+.about-history__inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto;
+  gap: 60px;
+}
+
+/* 左側テキスト */
+.about-history__text-area {
+  flex: 1;
+}
+
+.about-history__title {
+  font-size: 32px;
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 400;
+  color: var(--text-color);
+  margin: 16px 0 24px;
+}
+
+.about-history__desc {
+  font-size: 15px;
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 400;
+  color: var(--text-color);
+  line-height: 2;
+  margin: 0 0 32px;
+}
+
+/* ボタン群（2つのボタンを縦並び・隙間16px） */
+.about-history__btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 右側画像 */
+.about-history__image-area {
+  flex: 1.2;
+  position: relative;
+}
+
+.about-history__img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+}
+
+.about-history__img-caption {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  background-color: rgba(255, 255, 255, 0.85);
+  color: var(--text-color);
+  font-size: 10px;
+  padding: 6px 10px;
+  border-radius: 2px;
+}
+
+/* =========================================
+   message.php（ご挨拶）専用スタイル
+========================================= */
+.message-content {
+  padding: 100px 40px;
+  background-color: #FCFAFA;
+}
+
+.message-content__inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  max-width: 1100px;
+  margin: 0 auto;
+  gap: 80px;
+}
+
+/* --- 左側：画像 ＆ キャッチコピー --- */
+.message-content__left {
+  flex: 1;
+}
+
+.message-content__image-area {
+  position: relative;
+  margin-bottom: 32px;
+}
+
+.message-content__img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+}
+
+.message-content__img-caption {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  background-color: rgba(255, 255, 255, 0.85);
+  color: var(--text-color);
+  font-size: 10px;
+  padding: 6px 10px;
+  border-radius: 2px;
+}
+
+.message-content__title {
+  font-size: 32px;
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 400;
+  color: var(--text-color);
+  line-height: 1.5;
+  margin: 16px 0 24px;
+}
+
+.message-content__note {
+  font-size: 12px;
+  color: var(--sub-text-color);
+  margin: 0;
+}
+
+/* --- 右側：本文 ＆ プロフィール --- */
+.message-content__right {
+  flex: 1.2;
+}
+
+.message-content__body {
+  font-size: 15px;
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 400;
+  color: var(--text-color);
+  line-height: 2;
+  margin-bottom: 48px;
+}
+
+.message-content__body p {
+  margin-bottom: 24px;
+}
+
+.message-content__profile {
+  margin-bottom: 32px;
+}
+
+.message-content__brand {
+  font-size: 24px;
+  font-family: 'Noto Serif JP', serif;
+  color: #9E6B6B; /* ブランドカラーのピンクブラウン */
+  margin-bottom: 8px;
+}
+
+.message-content__author {
+  font-size: 16px;
+  font-family: 'Noto Serif JP', serif;
+  color: var(--text-color);
+  margin: 0;
+}
+
+/* =========================================
+   lessons.php（レッスン一覧）専用スタイル
+========================================= */
+
+.page-header--lessons {
+  padding: 60px 40px 80px;
+  background-color: #ffffff;
+}
+
+.page-header__inner--lessons {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.page-header__desc {
+  font-size: 14px;
+  font-family: 'Noto Serif JP', serif;
+  color: var(--text-color);
+  line-height: 1.8;
+  margin-top: 24px;
+}
+
+/* 右側：07 LESSONS アクセント */
+.page-header__count {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+}
+
+.page-header__number {
+  font-size: 64px;
+  font-family: 'Noto Serif JP', serif;
+  color: #C08A8A; /* ピンク系のアクセントカラー */
+  font-weight: 300;
+}
+
+.page-header__label {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: #C08A8A;
+  margin-top: 4px;
+}
+
+/* --- カテゴリーフィルターセクション --- */
+.lesson-filter {
+  width: 100%;
+  padding: 24px 40px;
+  background-color: #FCFAFA;
+  border-top: 1px solid #F0E6E6;
+  border-bottom: 1px solid #F0E6E6;
+  box-sizing: border-box;
+}
+
+.lesson-filter__inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* フィルターボタン群 */
+.lesson-filter__buttons {
+  display: flex;
+  gap: 16px;
+}
+
+.lesson-filter__btn {
+  padding: 10px 24px;
+  border-radius: 20px;
+  border: none;
+  background-color: #F3EBE7;
+  color: var(--text-color);
+  font-size: 13px;
+  font-family: 'Noto Serif JP', serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lesson-filter__btn:hover {
+  opacity: 0.8;
+}
+
+/* アクティブ（選択中）状態 */
+.lesson-filter__btn.is-active {
+  background-color: #9E6B6B;
+  color: #ffffff;
+}
+
+/* 注記 */
+.lesson-filter__note {
+  font-size: 12px;
+  color: var(--sub-text-color);
+  margin: 0;
+}
+
+/* --- レッスン一覧 セクション＆カードスタイル --- */
+.lesson-sections {
+  width: 100%;
+  background-color: #FCFAFA;
+  padding-bottom: 100px;
+}
+
+.lesson-sec {
+  padding: 80px 40px 0;
+  box-sizing: border-box;
+}
+
+.lesson-sec__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.lesson-sec__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 40px;
+}
+
+.lesson-sec__title {
+  font-size: 28px;
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 400;
+  color: var(--text-color);
+  margin: 12px 0 8px;
+}
+
+.lesson-sec__desc {
+  font-size: 13px;
+  color: var(--sub-text-color);
+  margin: 0;
+}
+
+.lesson-sec__badge {
+  font-size: 12px;
+  color: var(--sub-text-color);
+}
+
+/* グリッドレイアウト */
+.lesson-grid {
+  display: flex;
+  gap: 32px;
+}
+
+/* --- 体験・単発（2列カード）の左右横並びレイアウト修正 --- */
+.lesson-grid--2col .lesson-card {
+  flex: 1 1 calc(50% - 16px);
+  flex-direction: row; /* カード内を左右横並びに指定 */
+  min-height: 480px; /* カード全体の高さを揃える */
+}
+
+/* 左側：画像エリア */
+.lesson-grid--2col .lesson-card__image-area {
+  flex: 0 0 42%; /* 画像の幅をカードの42%に固定 */
+  position: relative;
+  overflow: hidden;
+}
+
+.lesson-grid--2col .lesson-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 画像の比率を維持しながら領域全体をカバー */
+  display: block;
+}
+
+/* 右側：テキストエリア */
+.lesson-grid--2col .lesson-card__body {
+  flex: 1;
+  padding: 32px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+
+.lesson-grid--3col .lesson-card {
+  flex: 1 1 calc(33.333% - 21.33px);
+}
+
+/* カードスタイル */
+.lesson-card {
+  background-color: #ffffff;
+  border: 1px solid #EAE2E2;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.lesson-card__image-area {
+  position: relative;
+  width: 100%;
+  background-color: #F8F4F1;
+}
+
+.lesson-card__img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.lesson-card__img-caption {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background-color: rgba(255, 255, 255, 0.85);
+  color: var(--text-color);
+  font-size: 10px;
+  padding: 4px 8px;
+  border-radius: 2px;
+}
+
+.lesson-card__body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.lesson-card__category {
+  font-size: 11px;
+  color: var(--sub-text-color);
+  margin-bottom: 8px;
+}
+
+.lesson-card__title {
+  font-size: 20px;
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 400;
+  color: var(--text-color);
+  margin: 0 0 12px;
+}
+
+.lesson-card__text {
+  font-size: 13px;
+  color: var(--text-color);
+  line-height: 1.7;
+  margin: 0 0 16px;
+}
+
+.lesson-card__meta {
+  border-top: 1px solid #F0E6E6;
+  padding-top: 12px;
+  margin-top: auto;
+  font-size: 12px;
+  color: var(--sub-text-color);
+  line-height: 1.6;
+}
+
+.lesson-card__notice {
+  background-color: #F9F2F0;
+  color: var(--text-color);
+  font-size: 12px;
+  padding: 10px 12px;
+  border-radius: 4px;
+  margin-top: 12px;
+}
+
+.lesson-card__price-box {
+  margin: 20px 0 24px;
+}
+
+.lesson-card__price-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-color);
+  margin: 0 0 4px;
+}
+
+.lesson-card__price-num {
+  font-size: 22px;
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 700;
+  color: var(--text-color);
+  margin: 0 0 4px;
+}
+
+.lesson-card__price-sub {
+  font-size: 11px;
+  color: var(--sub-text-color);
+  margin: 0;
+}
+
+
+/* =========================================
+   shop.php（オンラインショップ）専用スタイル
+========================================= */
+.shop-content {
+  width: 100%;
+  padding: 60px 40px 100px;
+  background-color: #FCFAFA;
+  box-sizing: border-box;
+}
+
+.shop-content__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* 掲載商品についてのご案内 */
+.shop-notice {
+  background-color: #FBF4F2;
+  border: 1px solid #F0E6E6;
+  border-radius: 6px;
+  padding: 20px 24px;
+  margin-bottom: 40px;
+}
+
+.shop-notice__title {
+  font-size: 13px;
+  color: #9E6B6B;
+  font-weight: 700;
+  margin: 0 0 6px;
+}
+
+.shop-notice__text {
+  font-size: 13px;
+  color: var(--text-color);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* 件数 ＆ PAGE 表示 */
+.shop-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  font-size: 12px;
+  color: var(--sub-text-color);
+}
+
+.shop-bar__count, .shop-bar__page {
+  margin: 0;
+}
+
+
+
+/* =========================================
+   shop.php（オンラインショップ）専用スタイル
+========================================= */
+
+/* 商品カードグリッド (4列) */
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-bottom: 60px;
+}
+
+.shop-card {
+  background-color: #ffffff;
+  border: 1px solid #EAE2E2;
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.shop-card__image-area {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background-color: #F8F4F1;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.shop-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* --- カード本文とボタン構造 --- */
+.shop-card__body {
+  padding: 20px 16px 0; /* 下パディングを0にしてフォームを一番下に密着 */
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  box-sizing: border-box;
+}
+
+.shop-card__content {
+  margin-bottom: 20px;
+}
+
+.shop-card__id {
+  font-size: 10px;
+  color: var(--sub-text-color);
+  margin: 0 0 4px;
+}
+
+.shop-card__title {
+  font-size: 16px;
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 400;
+  color: var(--text-color);
+  margin: 0 0 8px;
+  line-height: 1.4;
+}
+
+.shop-card__price {
+  font-size: 12px;
+  color: var(--sub-text-color);
+  margin: 0 0 8px;
+}
+
+.shop-card__desc {
+  font-size: 12px;
+  color: var(--sub-text-color);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* カードの一番下にくっつけるフォーム＆ボタン */
+.shop-card__form {
+  margin-top: auto; /* 一番下に押し下げる */
+  margin-left: -16px; /* 親の左右padding(16px)を取り払ってカード幅いっぱいに広げる */
+  margin-right: -16px;
+  width: calc(100% + 32px);
+}
+
+.shop-card__btn {
+  width: 100%;
+  font-size: 13px;
+  padding: 14px 16px;
+  background-color: #FAFAF8; /* 下部に馴染むよう淡い背景色 */
+  border: none;
+  border-top: 1px solid #EAE2E2; /* 上側にだけうっすら境界線を入れる */
+  border-radius: 0; /* 角丸をリセット */
+  color: var(--main-color);
+  cursor: pointer;
+  text-align: center;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.3s ease;
+}
+
+.shop-card__btn:hover:not(:disabled) {
+  background-color: var(--main-color);
+  color: #ffffff;
+}
+
+/* 売り切れ（disabled）時 */
+.shop-card__btn:disabled {
+  background-color: #F3ECEC;
+  color: #B5A8A8;
+  border-top-color: #E0D5D5;
+  cursor: not-allowed;
+}
+
+/* =========================================
+   shop.php ページネーション ＆ お問い合わせ枠
+========================================= */
+
+/* ページネーション */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin: 60px 0 40px;
+}
+
+/* ページネーションボタン */
+.pagination__item {
+  display: inline-block; /* inline-block のまま対応 */
+  width: 32px;
+  height: 32px;
+  margin: 0 8px;
+  line-height: 30px; /* 枠線(1px*2)を引いた内寸の高さに合わせて文字を垂直中央へ */
+  text-align: center; /* 文字を水平中央へ */
+  border-radius: 50%;
+  border: 1px solid #9E6B6B;
+  color: #9E6B6B;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  box-sizing: border-box; /* 枠線を含めた計算にする */
+  transition: all 0.3s ease;
+}
+
+.pagination__item.is-active,
+.pagination__item:hover {
+  background-color: #9E6B6B;
+  color: #ffffff;
+}
+
+
+/* 商品のお問い合わせエリア */
+.shop-contact-area {
+  max-width: 1100px;
+  margin: 0 auto 80px;
+  text-align: center;
+}
+
+.shop-contact-area__text {
+  font-size: 14px;
+  color: var(--text-color, #333333);
+  margin-bottom: 20px;
+  letter-spacing: 0.05em;
+}
+
+.shop-contact-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 20px 24px;
+  border: 1px solid #9E6B6B;
+  border-radius: 4px;
+  color: #9E6B6B;
+  text-decoration: none;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.shop-contact-btn:hover {
+  background-color: #FAFAF8;
+}
+
+.shop-contact-btn__text {
+  font-size: 14px;
+}
+
+.shop-contact-btn__arrow {
+  font-size: 16px;
+}
+
+
+/* ul.pagination__list {
+  text-align: center;
+
+}
+
+li.pagination__item {
+  display: inline-block;
+  margin-right: 8px;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  background: #A46564;
+  color: #FFF;
+  text-decoration: none;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+} */
